@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>PortaChar - Operator &amp; User Access Management</title>
+
+	<!-- Global stylesheets -->
+	<link href="assets/fonts/inter/inter.css" rel="stylesheet" type="text/css">
+	<link href="assets/icons/phosphor/styles.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/all.min.css" id="stylesheet" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
+
+	<!-- Core JS files -->
+	<script src="assets/js/bootstrap/bootstrap.bundle.min.js"></script>
+	<!-- /core JS files -->
+
+	<!-- Theme JS files -->
+	<script src="assets/js/app.js"></script>
+	<script src="assets/js/auth.js"></script>
+	<!-- /theme JS files -->
+
+</head>
+
+<body>
+
+	<!-- Main navbar (Identical structure to index.html) -->
+	<div class="navbar navbar-dark navbar-expand-lg navbar-static border-bottom border-bottom-white border-opacity-10">
+		<div class="container-fluid">
+			<div class="d-flex d-lg-none me-2">
+				<button type="button" class="navbar-toggler sidebar-mobile-main-toggle rounded-pill">
+					<i class="ph-list"></i>
+				</button>
+			</div>
+
+			<div class="navbar-brand flex-1 flex-lg-0">
+				<a href="index.html" class="d-inline-flex align-items-center text-white text-decoration-none">
+					<div class="bg-teal bg-opacity-20 text-teal p-1 rounded me-2 d-flex align-items-center justify-content-center" style="width: 30px; height: 30px;">
+						<i class="ph-drop-half fs-5"></i>
+					</div>
+					<span class="fw-bold fs-5 tracking-tight">Porta<span class="text-teal">Char</span><span class="text-info">.io</span></span>
+				</a>
+			</div>
+
+			<ul class="nav flex-row">
+				<li class="nav-item d-lg-none">
+					<a href="#navbar_search" class="navbar-nav-link navbar-nav-link-icon rounded-pill" data-bs-toggle="collapse">
+						<i class="ph-magnifying-glass"></i>
+					</a>
+				</li>
+
+				<!-- Battery Health Indicator -->
+				<li class="nav-item d-none d-md-flex align-items-center me-3">
+					<span class="badge bg-teal bg-opacity-20 text-teal border border-teal border-opacity-25 px-2 py-1">
+						<i class="ph-battery-charging me-1"></i> Bat: 87% (15.2V)
+					</span>
+				</li>
+
+				<!-- Valve Indicator -->
+				<li class="nav-item d-none d-sm-flex align-items-center me-3">
+					<span class="badge bg-success bg-opacity-20 text-success border border-success border-opacity-25 px-2 py-1">
+						<i class="ph-circle-wavy-check me-1"></i> Solenoid: OPEN (12.4 L/m)
+					</span>
+				</li>
+
+				<!-- Database Mode Indicator -->
+				<li class="nav-item d-none d-sm-flex align-items-center me-3">
+					<span class="badge bg-info bg-opacity-20 text-info border border-info border-opacity-25 px-2 py-1">
+						<i class="ph-database me-1"></i> SQLite3: auth.db
+					</span>
+				</li>
+			</ul>
+
+			<!-- Navbar Search -->
+			<div class="navbar-collapse justify-content-center flex-lg-1 order-2 order-lg-1 collapse" id="navbar_search">
+				<div class="navbar-search flex-fill position-relative mt-2 mt-lg-0 mx-lg-3">
+					<div class="form-control-feedback form-control-feedback-start flex-grow-1" data-color-theme="dark">
+						<input type="text" class="form-control bg-transparent rounded-pill" id="input_user_search" placeholder="Filter operators, roles, or creation dates..." onkeyup="filterUserTable()">
+						<div class="form-control-feedback-icon">
+							<i class="ph-magnifying-glass"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<ul class="nav flex-row justify-content-end order-1 order-lg-2">
+				<li class="nav-item ms-lg-2">
+					<a href="index.html" class="btn btn-outline-light btn-sm rounded-pill px-3">
+						<i class="ph-gauge me-1"></i> Live Telemetry
+					</a>
+				</li>
+				<li class="nav-item nav-item-dropdown-lg dropdown ms-lg-2">
+					<a href="#" class="navbar-nav-link align-items-center rounded-pill p-1" data-bs-toggle="dropdown">
+						<div class="status-indicator-container">
+							<img src="assets/images/demo/users/face1.jpg" class="w-32px h-32px rounded-pill" alt="User">
+							<span class="status-indicator bg-success"></span>
+						</div>
+						<div class="d-none d-lg-inline-block mx-2 text-start">
+							<span class="fw-semibold d-block current-user-name" id="navbar_user_name">Operator</span>
+							<span class="badge bg-teal rounded-pill fs-xs current-user-role" id="navbar_user_role">ADMIN</span>
+						</div>
+					</a>
+					<div class="dropdown-menu dropdown-menu-end">
+						<a href="index.html" class="dropdown-item"><i class="ph-gauge me-2"></i> Live Telemetry</a>
+						<a href="users.html" class="dropdown-item active"><i class="ph-users me-2"></i> User Management</a>
+						<div class="dropdown-divider"></div>
+						<a href="#" class="dropdown-item text-danger btn-logout" id="btn_logout"><i class="ph-sign-out me-2"></i> Sign Out</a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- /main navbar -->
+
+	<!-- Page content -->
+	<div class="page-content">
+
+		<!-- Main sidebar (Matches index.html exactly) -->
+		<div class="sidebar sidebar-dark sidebar-main sidebar-expand-lg">
+			<!-- Sidebar content -->
+			<div class="sidebar-content">
+
+				<!-- Sidebar header -->
+				<div class="sidebar-section">
+					<div class="sidebar-section-body d-flex justify-content-center">
+						<h5 class="sidebar-resize-hide flex-grow-1 my-auto">Navigation</h5>
+						<div>
+							<button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-control sidebar-main-resize d-none d-lg-inline-flex">
+								<i class="ph-arrows-left-right"></i>
+							</button>
+							<button type="button" class="btn btn-flat-white btn-icon btn-sm rounded-pill border-transparent sidebar-mobile-main-toggle d-lg-none">
+								<i class="ph-x"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+				<!-- /sidebar header -->
+
+				<!-- Main navigation -->
+				<div class="sidebar-section">
+					<ul class="nav nav-sidebar" data-nav-type="accordion">
+
+						<!-- Header -->
+						<li class="nav-item-header pt-0">
+							<div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">PortaChar Field Operations</div>
+							<i class="ph-dots-three sidebar-resize-show"></i>
+						</li>
+						<li class="nav-item">
+							<a href="index.html" class="nav-link">
+								<i class="ph-gauge"></i>
+								<span>Live Telemetry</span>
+								<span class="badge bg-success rounded-pill ms-auto">8 ch</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html#section_device_health" class="nav-link">
+								<i class="ph-battery-charging"></i>
+								<span>Device &amp; Battery Health</span>
+								<span class="badge bg-teal rounded-pill ms-auto">87% Bat</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html#section_matrix" class="nav-link">
+								<i class="ph-arrows-split"></i>
+								<span>Pre vs Post Matrix</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html#section_charts" class="nav-link">
+								<i class="ph-chart-line"></i>
+								<span>Clarity &amp; pH Curves</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html#section_audit" class="nav-link">
+								<i class="ph-clipboard-text"></i>
+								<span>Telemetry Audit Log</span>
+							</a>
+						</li>
+
+						<!-- Compliance header -->
+						<li class="nav-item-header">
+							<div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Compliance & Standards</div>
+							<i class="ph-dots-three sidebar-resize-show"></i>
+						</li>
+						<li class="nav-item">
+							<a href="index.html" class="nav-link">
+								<i class="ph-shield-check"></i>
+								<span>EPA Safe Thresholds</span>
+								<span class="badge bg-primary rounded-pill ms-auto">&lt; 5 NTU</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html" class="nav-link">
+								<i class="ph-flask"></i>
+								<span>pH Potability Range</span>
+								<span class="badge bg-success rounded-pill ms-auto">6.5 - 8.5</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="index.html" class="nav-link">
+								<i class="ph-wrench"></i>
+								<span>Sensor Calibration</span>
+								<span class="badge bg-indigo rounded-pill ms-auto">Nominal</span>
+							</a>
+						</li>
+
+						<!-- Administration -->
+						<li class="nav-item-header">
+							<div class="text-uppercase fs-sm lh-sm opacity-50 sidebar-resize-hide">Administration</div>
+							<i class="ph-dots-three sidebar-resize-show"></i>
+						</li>
+						<li class="nav-item">
+							<a href="users.html" class="nav-link active">
+								<i class="ph-users-three"></i>
+								<span>User Management</span>
+								<span class="badge bg-teal rounded-pill ms-auto" id="sidebar_user_badge">0 Users</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="#" class="nav-link text-danger btn-logout">
+								<i class="ph-sign-out"></i>
+								<span>Sign Out</span>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<!-- /main navigation -->
+
+			</div>
+			<!-- /sidebar content -->
+		</div>
+		<!-- /main sidebar -->
+
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Inner content -->
+			<div class="content-inner">
+
+				<!-- Page header (Standard Limitless Page Header) -->
+				<div class="page-header page-header-light shadow-sm">
+					<div class="page-header-content d-lg-flex">
+						<div class="d-flex">
+							<h4 class="page-title mb-0">
+								<span class="fw-normal">PortaChar™ Administration</span> &bull; Operator Access &amp; User Directory
+							</h4>
+							<a href="#page_header_collapse" class="btn btn-light align-self-center collapsed d-lg-none border-transparent rounded-pill p-0 ms-auto" data-bs-toggle="collapse">
+								<i class="ph-caret-down collapsible-indicator ph-sm m-1"></i>
+							</a>
+						</div>
+
+						<div class="collapse d-lg-block my-lg-auto ms-lg-auto" id="page_header_collapse">
+							<div class="d-sm-flex align-items-center mb-3 mb-lg-0">
+								<button type="button" class="btn btn-teal btn-sm rounded-pill me-sm-2 mb-2 mb-sm-0" data-bs-toggle="modal" data-bs-target="#modal_add_user">
+									<i class="ph-user-plus me-1"></i> Add New User
+								</button>
+								<button type="button" class="btn btn-outline-primary btn-sm rounded-pill mb-2 mb-sm-0" onclick="loadUsersTable()">
+									<i class="ph-arrows-clockwise me-1"></i> Sync User Records
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="page-header-content border-top">
+						<div class="breadcrumb">
+							<a href="index.html" class="breadcrumb-item"><i class="ph-house"></i></a>
+							<a href="index.html" class="breadcrumb-item">Administration</a>
+							<span class="breadcrumb-item active">User Management &amp; RBAC</span>
+						</div>
+					</div>
+				</div>
+				<!-- /page header -->
+
+				<!-- Content area -->
+				<div class="content">
+
+					<!-- Limitless Quick Stats Boxes (Matches index.html top KPI row) -->
+					<div class="row">
+						<div class="col-sm-6 col-xl-3">
+							<div class="card bg-teal text-white">
+								<div class="card-body">
+									<div class="d-flex">
+										<h3 class="mb-0" id="stat_total_users">0</h3>
+										<span class="badge bg-black bg-opacity-50 rounded-pill align-self-center ms-auto" id="stat_total_badge">Accounts</span>
+									</div>
+									<div>
+										Total Registered Users
+										<div class="fs-sm opacity-75">SQLite User Records</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6 col-xl-3">
+							<div class="card bg-danger text-white">
+								<div class="card-body">
+									<div class="d-flex align-items-center">
+										<h3 class="mb-0" id="stat_admin_users">0</h3>
+										<span class="badge bg-black bg-opacity-50 rounded-pill ms-auto">Root Access</span>
+									</div>
+									<div>
+										Administrators
+										<div class="fs-sm opacity-75">Full CRUD &amp; User Privileges</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6 col-xl-3">
+							<div class="card bg-indigo text-white">
+								<div class="card-body">
+									<div class="d-flex align-items-center">
+										<h3 class="mb-0" id="stat_operator_users">0</h3>
+										<span class="badge bg-black bg-opacity-50 rounded-pill ms-auto">Field Ops</span>
+									</div>
+									<div>
+										Field Operators
+										<div class="fs-sm opacity-75">Telemetry &amp; Valve Control</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-sm-6 col-xl-3">
+							<div class="card bg-primary text-white">
+								<div class="card-body">
+									<div class="d-flex align-items-center">
+										<h3 class="mb-0">PBKDF2</h3>
+										<span class="badge bg-black bg-opacity-50 rounded-pill ms-auto">100k iter</span>
+									</div>
+									<div>
+										Cryptographic Security
+										<div class="fs-sm opacity-75">Salted SHA-256 in auth.db</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /quick stats boxes -->
+
+					<!-- Feedback Alert -->
+					<div id="status_alert" class="alert alert-dismissible fade show d-none py-2 px-3 fs-sm" role="alert">
+						<span id="status_alert_msg"></span>
+						<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					</div>
+
+					<!-- Sensor / User Diagnostics Table (Limitless Native Table structure) -->
+					<div class="card">
+						<div class="card-header d-flex align-items-center py-2">
+							<h6 class="mb-0 fw-semibold"><i class="ph-users me-2 text-teal"></i> Registered Operators &amp; System Accounts</h6>
+							<div class="ms-auto d-flex align-items-center">
+								<span class="badge bg-teal bg-opacity-20 text-teal border border-teal border-opacity-25 me-2">
+									<i class="ph-database me-1"></i> Database: auth.db
+								</span>
+								<span class="badge bg-success rounded-pill">
+									<i class="ph-check-circle me-1"></i> Auth Online
+								</span>
+							</div>
+						</div>
+
+						<div class="table-responsive">
+							<table class="table table-hover text-nowrap" id="table_users">
+								<thead class="table-light">
+									<tr>
+										<th style="width: 80px;">User ID</th>
+										<th>Operator Profile</th>
+										<th>System Role</th>
+										<th>Registration Date</th>
+										<th>Account Status</th>
+										<th class="text-center" style="width: 140px;">Actions</th>
+									</tr>
+								</thead>
+								<tbody id="users_table_body">
+									<tr>
+										<td colspan="6" class="text-center py-4 text-muted">
+											<span class="spinner-border spinner-border-sm me-2"></span> Loading user records...
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- /table card -->
+
+				</div>
+				<!-- /content area -->
+
+				<!-- Footer (Identical structure to index.html) -->
+				<div class="navbar navbar-sm navbar-footer border-top">
+					<div class="container-fluid">
+						<span>&copy; 2026 <a href="#">PortaChar Portable Biochar Filtration Systems</a> &bull; Powered by Limitless Responsive Web Application Kit</span>
+
+						<ul class="nav">
+							<li class="nav-item">
+								<a href="#" class="navbar-nav-link text-muted"><i class="ph-shield-check me-1"></i> EPA Drinking Water Guidelines</a>
+							</li>
+							<li class="nav-item">
+								<a href="#" class="navbar-nav-link text-muted ms-3"><i class="ph-certificate me-1"></i> WHO 4th Edition Standards</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /footer -->
+
+			</div>
+			<!-- /inner content -->
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+	<!-- Modal: Add New User (Limitless Form Components) -->
+	<div class="modal fade" id="modal_add_user" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title fw-semibold">
+						<i class="ph-user-plus text-teal me-2"></i> Register New System User
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<form id="form_add_user">
+					<div class="modal-body">
+						<div id="modal_alert" class="alert alert-danger d-none py-2 px-3 fs-sm"></div>
+
+						<div class="mb-3">
+							<label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+							<div class="form-control-feedback form-control-feedback-start">
+								<input type="text" class="form-control" id="new_username" placeholder="e.g. field_tech01" required minlength="3">
+								<div class="form-control-feedback-icon">
+									<i class="ph-user"></i>
+								</div>
+							</div>
+							<div class="form-text fs-sm text-muted">Minimum 3 alphanumeric characters.</div>
+						</div>
+
+						<div class="mb-3">
+							<label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+							<div class="form-control-feedback form-control-feedback-start">
+								<input type="password" class="form-control" id="new_password" placeholder="At least 4 characters" required minlength="4">
+								<div class="form-control-feedback-icon">
+									<i class="ph-lock-key"></i>
+								</div>
+							</div>
+							<div class="form-text fs-sm text-muted">Secured via salted PBKDF2-HMAC-SHA256 (100,000 rounds).</div>
+						</div>
+
+						<div class="mb-3">
+							<label class="form-label fw-semibold">System Role Permission <span class="text-danger">*</span></label>
+							<select class="form-select" id="new_role">
+								<option value="operator" selected>Field Operator (Telemetry monitoring &amp; valve control)</option>
+								<option value="admin">Administrator (Full CRUD, user management, and configuration)</option>
+								<option value="viewer">Viewer (Read-only telemetry observer)</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-link text-muted" data-bs-dismiss="modal">Cancel</button>
+						<button type="submit" id="btn_save_user" class="btn btn-teal rounded-pill px-3">
+							<i class="ph-check me-1"></i> Create User Account
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- /modal: add new user -->
+
+	<script>
+		var currentUser = null;
+		var allUsers = [];
+
+		function showAlert(message, type) {
+			var alertBox = document.getElementById('status_alert');
+			var alertMsg = document.getElementById('status_alert_msg');
+			alertBox.className = 'alert alert-' + (type || 'success') + ' alert-dismissible fade show py-2 px-3 fs-sm';
+			alertMsg.textContent = message;
+			alertBox.classList.remove('d-none');
+		}
+
+		function filterUserTable() {
+			var query = (document.getElementById('input_user_search').value || '').toLowerCase().trim();
+			var tbody = document.getElementById('users_table_body');
+			if (!allUsers || allUsers.length === 0) return;
+
+			var filtered = allUsers.filter(function(u) {
+				return u.username.toLowerCase().indexOf(query) !== -1 ||
+				       u.role.toLowerCase().indexOf(query) !== -1 ||
+				       String(u.id).indexOf(query) !== -1;
+			});
+
+			renderUsersRows(filtered);
+		}
+
+		function renderUsersRows(users) {
+			var tbody = document.getElementById('users_table_body');
+			if (!users || users.length === 0) {
+				tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><i class="ph-magnifying-glass me-1"></i> No matching users found.</td></tr>';
+				return;
+			}
+
+			var adminCount = 0;
+			allUsers.forEach(function(u) {
+				if (u.role === 'admin') adminCount++;
+			});
+
+			var html = '';
+			users.forEach(function(u) {
+				var roleBadge = '<span class="badge bg-teal bg-opacity-10 text-teal border border-teal border-opacity-25">Field Operator</span>';
+				var iconColor = 'teal';
+				var roleDesc = 'Telemetry & Valve Control';
+
+				if (u.role === 'admin') {
+					roleBadge = '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Administrator</span>';
+					iconColor = 'danger';
+					roleDesc = 'Full System Privileges';
+				} else if (u.role === 'viewer') {
+					roleBadge = '<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25">Viewer</span>';
+					iconColor = 'secondary';
+					roleDesc = 'Read-Only Observer';
+				}
+
+				var isSelf = currentUser && currentUser.id === u.id;
+				var isProtectedAdmin = u.username.toLowerCase() === 'admin' && adminCount <= 1;
+
+				var actionBtn = '';
+				if (isSelf) {
+					actionBtn = '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25 px-2 py-1"><i class="ph-user-circle me-1"></i> Current Session</span>';
+				} else if (isProtectedAdmin) {
+					actionBtn = '<span class="badge bg-secondary bg-opacity-10 text-muted border border-secondary border-opacity-25 px-2 py-1"><i class="ph-lock me-1"></i> Protected Admin</span>';
+				} else {
+					actionBtn = '<button type="button" class="btn btn-outline-danger btn-sm rounded-pill px-2 py-1" onclick="confirmDeleteUser(' + u.id + ', \'' + u.username + '\')"><i class="ph-trash me-1"></i> Delete</button>';
+				}
+
+				html += '<tr>' +
+					'<td><code class="text-teal">#' + u.id + '</code></td>' +
+					'<td>' +
+						'<div class="d-flex align-items-center">' +
+							'<a href="#" class="bg-' + iconColor + ' bg-opacity-10 text-' + iconColor + ' lh-1 rounded-pill p-2 me-3">' +
+								'<i class="ph-user"></i>' +
+							'</a>' +
+							'<div>' +
+								'<span class="text-body fw-semibold">' + u.username + '</span>' +
+								'<div class="text-muted fs-sm">' + roleDesc + '</div>' +
+							'</div>' +
+						'</div>' +
+					'</td>' +
+					'<td>' + roleBadge + '</td>' +
+					'<td><span class="text-muted fs-sm">' + (u.created_at || 'N/A') + '</span></td>' +
+					'<td><span class="badge bg-success rounded-pill"><i class="ph-check-circle me-1"></i> Active</span></td>' +
+					'<td class="text-center">' + actionBtn + '</td>' +
+				'</tr>';
+			});
+
+			tbody.innerHTML = html;
+		}
+
+		function loadUsersTable() {
+			var tbody = document.getElementById('users_table_body');
+			tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted"><span class="spinner-border spinner-border-sm me-2"></span> Fetching user records...</td></tr>';
+
+			PortaCharAuth.getUsers().then(function(res) {
+				if (!res || !res.success || !res.users) {
+					tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger"><i class="ph-warning-circle me-1"></i> ' + (res.error || 'Failed to retrieve users. Make sure server is running.') + '</td></tr>';
+					return;
+				}
+
+				allUsers = res.users;
+				document.getElementById('stat_total_users').textContent = allUsers.length;
+				var badge = document.getElementById('sidebar_user_badge');
+				if (badge) badge.textContent = allUsers.length + ' Users';
+
+				var adminCount = 0;
+				var opCount = 0;
+				allUsers.forEach(function(u) {
+					if (u.role === 'admin') adminCount++;
+					else opCount++;
+				});
+				document.getElementById('stat_admin_users').textContent = adminCount;
+				document.getElementById('stat_operator_users').textContent = opCount;
+
+				renderUsersRows(allUsers);
+			}).catch(function(err) {
+				tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger"><i class="ph-warning me-1"></i> Error connecting to authentication service.</td></tr>';
+			});
+		}
+
+		function confirmDeleteUser(userId, username) {
+			if (!confirm('Are you sure you want to permanently delete user "' + username + '"?')) {
+				return;
+			}
+			PortaCharAuth.deleteUser(userId).then(function(res) {
+				if (res && res.success) {
+					showAlert(res.message || 'User successfully deleted', 'success');
+					loadUsersTable();
+				} else {
+					showAlert(res.error || 'Failed to delete user', 'danger');
+				}
+			});
+		}
+
+		// Handle Add User Form Submission
+		document.getElementById('form_add_user').addEventListener('submit', function(e) {
+			e.preventDefault();
+			var u = document.getElementById('new_username').value.trim();
+			var p = document.getElementById('new_password').value.trim();
+			var r = document.getElementById('new_role').value;
+			var modalAlert = document.getElementById('modal_alert');
+			var btnSave = document.getElementById('btn_save_user');
+
+			modalAlert.classList.add('d-none');
+			btnSave.disabled = true;
+			btnSave.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating...';
+
+			PortaCharAuth.createUser(u, p, r).then(function(res) {
+				btnSave.disabled = false;
+				btnSave.innerHTML = '<i class="ph-check me-1"></i> Create User Account';
+
+				if (res && res.success) {
+					var modalEl = document.getElementById('modal_add_user');
+					var modalInstance = bootstrap.Modal.getInstance(modalEl);
+					if (modalInstance) modalInstance.hide();
+					document.getElementById('form_add_user').reset();
+
+					showAlert('User "' + u + '" (' + r + ') created successfully!', 'success');
+					loadUsersTable();
+				} else {
+					modalAlert.textContent = res.error || 'Failed to create user.';
+					modalAlert.classList.remove('d-none');
+				}
+			});
+		});
+
+		// Page Initialization
+		document.addEventListener('DOMContentLoaded', function() {
+			PortaCharAuth.checkAuth({ redirectToLogin: true }).then(function(res) {
+				if (res && res.authenticated) {
+					currentUser = res.user;
+					loadUsersTable();
+				}
+			});
+		});
+	</script>
+
+</body>
+</html>
