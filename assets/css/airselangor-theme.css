@@ -1,0 +1,159 @@
+/* ==========================================================
+   PortaChar × Air Selangor theme override
+   Load AFTER assets/css/all.min.css. No HTML structure changes.
+   ========================================================== */
+:root {
+  --as-sky: #4DB8E8;       /* buttons, search icon, links */
+  --as-sky-dark: #2A9BD4;  /* hover / logo blue */
+  --as-navy: #1B3A5C;      /* headings */
+  --as-ink: #2B3A4A;       /* body text */
+  --as-muted: #6F8399;     /* secondary text */
+  --as-mist: #EFF6FF;      /* page background */
+  --as-green: #5FBF72;     /* success / nature */
+  --as-aqua: #3CC5C9;
+  --as-sun: #F7C948;       /* warning */
+  --as-coral: #F26B5B;     /* danger */
+  --as-radius: 16px;
+  --as-shadow: 0 4px 18px rgba(42, 155, 212, .12);
+
+  --bs-primary: #4DB8E8;   --bs-primary-rgb: 77,184,232;
+  --bs-info: #2A9BD4;      --bs-info-rgb: 42,155,212;
+  --bs-teal: #3CC5C9;      --bs-teal-rgb: 60,197,201;
+  --bs-indigo: #1B6FB5;    --bs-indigo-rgb: 27,111,181;
+  --bs-pink: #5FBF72;      --bs-pink-rgb: 95,191,114;
+  --bs-success: #5FBF72;   --bs-success-rgb: 95,191,114;
+  --bs-warning: #F7C948;   --bs-warning-rgb: 247,201,72;
+  --bs-danger: #F26B5B;    --bs-danger-rgb: 242,107,91;
+  --bs-body-font-family: 'Nunito Sans', 'Inter', system-ui, sans-serif;
+  --bs-body-color: var(--as-ink);
+  --bs-body-bg: var(--as-mist);
+  --bs-border-radius: 12px;
+}
+
+body, .page-content, .content-wrapper { background: var(--as-mist); font-family: var(--bs-body-font-family); color: var(--as-ink); }
+h1,h2,h3,h4,h5,h6,.page-title { color: var(--as-navy); font-weight: 600; }
+.text-muted { color: var(--as-muted) !important; }
+.text-uppercase { text-transform: none !important; letter-spacing: 0; }   /* Air Selangor uses sentence case */
+
+/* ---------- Top navbar: white, like the reference ---------- */
+.navbar-dark, .navbar.navbar-dark {
+  background: #fff !important; color: var(--as-navy);
+  border-bottom: 1px solid rgba(27,58,92,.08) !important;
+  box-shadow: 0 2px 10px rgba(27,58,92,.05);
+}
+.navbar-dark .navbar-brand a, .navbar-dark .navbar-nav-link, .navbar-dark .text-white { color: var(--as-navy) !important; }
+.navbar-brand .text-teal { color: var(--as-sky-dark) !important; }
+.navbar-brand .text-info { color: var(--as-sky) !important; }
+.navbar-brand .bg-teal { background: rgba(77,184,232,.15) !important; }
+.navbar .badge { border-radius: 999px; font-weight: 600; }
+
+/* ---------- Sidebar: white with soft blue active pill ---------- */
+.sidebar-dark, .sidebar.sidebar-dark {
+  --sidebar-bg: #fff; background: #fff; color: var(--as-ink);
+  border-right: 1px solid rgba(27,58,92,.06);
+}
+.sidebar-dark .nav-link, .sidebar-dark h5, .sidebar-dark .nav-item-header { color: var(--as-ink); }
+.sidebar-dark .nav-sidebar .nav-link { border-radius: 12px; margin: 2px 8px; }
+.sidebar-dark .nav-sidebar .nav-link:hover { background: var(--as-mist); color: var(--as-sky-dark); }
+.sidebar-dark .nav-sidebar .nav-link.active { background: rgba(77,184,232,.15); color: var(--as-sky-dark); font-weight: 600; }
+.sidebar-dark .btn-flat-white { color: var(--as-ink); }
+
+/* ---------- Page header: pale sky gradient + wave edge ---------- */
+.page-header, .page-header-light {
+  background: linear-gradient(180deg, #DDF0FB 0%, var(--as-mist) 100%) !important;
+  border: 0; box-shadow: none !important; position: relative; padding-bottom: 18px;
+}
+.page-header::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 22px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 40' preserveAspectRatio='none'%3E%3Cpath fill='%23EFF6FF' d='M0 24c240 24 480 24 720 6s480-22 720-2v12H0z'/%3E%3C/svg%3E") center/100% 100% no-repeat;
+  pointer-events: none;
+}
+.page-title { font-weight: 300; font-size: 1.35rem; }
+.page-title .fw-normal { font-weight: 600 !important; color: var(--as-navy); }
+.breadcrumb-item, .breadcrumb-item a { color: var(--as-muted); }
+
+/* ---------- Cards: white, big radius, soft blue shadow ---------- */
+.card {
+  border: 0; border-radius: var(--as-radius); background: #fff;
+  box-shadow: var(--as-shadow); overflow: hidden;
+}
+.card-header { background: transparent; border-bottom: 1px solid rgba(27,58,92,.06); }
+.card.border-top { border-top-width: 4px !important; }   /* accent bar keeps sensor colour-coding */
+
+/* KPI cards: soft water-toned fills instead of heavy solids */
+.card.bg-teal    { background: linear-gradient(135deg, #4DB8E8, #3CC5C9) !important; }
+.card.bg-primary { background: linear-gradient(135deg, #2A9BD4, #4DB8E8) !important; }
+.card.bg-indigo  { background: linear-gradient(135deg, #1B6FB5, #2A9BD4) !important; }
+.card.bg-pink    { background: linear-gradient(135deg, #5FBF72, #3CC5C9) !important; }
+.card.bg-teal h3, .card.bg-primary h3, .card.bg-indigo h3, .card.bg-pink h3 { color: #fff; font-weight: 700; }
+
+/* ---------- Buttons: pill shaped sky blue ---------- */
+.btn { border-radius: 999px; font-weight: 600; }
+.btn-primary { --bs-btn-bg: #4DB8E8; --bs-btn-border-color: #4DB8E8; --bs-btn-hover-bg: #2A9BD4; --bs-btn-hover-border-color: #2A9BD4; --bs-btn-active-bg: #2A9BD4; color: #fff; }
+.btn-outline-primary { --bs-btn-color: #2A9BD4; --bs-btn-border-color: #4DB8E8; --bs-btn-hover-bg: #4DB8E8; --bs-btn-hover-border-color: #4DB8E8; --bs-btn-hover-color:#fff; }
+.btn-light { background: #fff; border-color: rgba(27,58,92,.1); color: var(--as-ink); }
+.btn-group > .btn { border-radius: 999px !important; margin: 0 2px; }
+.btn-danger { background: var(--as-coral); border-color: var(--as-coral); }
+
+/* ---------- Icons: rounded tiles like the "Pay Bills / Report Leaks" shortcuts ---------- */
+.card-header h6 > i, .card-body > .d-flex > i.ph-2x {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 10px; font-size: 1.05rem;
+  background: rgba(77,184,232,.14);
+}
+.card-header h6 > i.text-warning { background: rgba(247,201,72,.2); }
+.card-header h6 > i.text-danger  { background: rgba(242,107,91,.14); }
+.card-header h6 > i.text-success { background: rgba(95,191,114,.16); }
+.card-header h6 > i.text-teal    { background: rgba(60,197,201,.16); }
+.card-header h6 > i.text-indigo  { background: rgba(27,111,181,.14); }
+
+/* ---------- Badges, progress, tables, inputs ---------- */
+.badge { border-radius: 999px; font-weight: 600; }
+.progress { background: #E3EEF8; border-radius: 999px; }
+.progress-bar { border-radius: 999px; }
+.table { --bs-table-hover-bg: #F4F9FE; }
+.table-light, .table-light th { background: #F4F9FE !important; color: var(--as-navy); }
+.form-control, .form-select { border-radius: 999px; border-color: rgba(27,58,92,.15); }
+.form-control:focus, .form-select:focus { border-color: var(--as-sky); box-shadow: 0 0 0 .2rem rgba(77,184,232,.2); }
+.form-check-input:checked { background-color: var(--as-sky); border-color: var(--as-sky); }
+.nav-tabs-underline .nav-link.active { color: var(--as-sky-dark); border-color: var(--as-sky); }
+.navbar-footer { background: #fff; color: var(--as-muted); }
+a { color: var(--as-sky-dark); }
+
+/* ==========================================================
+   v2 FIXES: stronger specificity + classes used by login.html / users.html
+   ========================================================== */
+html body.bg-dark { background: linear-gradient(180deg, #DDF0FB 0%, #EFF6FF 70%) !important; }
+html body .card { background: #fff; border: 0; border-radius: 16px; box-shadow: 0 4px 18px rgba(42,155,212,.12); }
+.login-form .card { box-shadow: 0 16px 48px rgba(42,155,212,.22) !important; }
+.login-form .card.bg-light { background: #EFF6FF !important; }
+.login-form h5 { color: #1B3A5C; }
+
+/* Buttons Limitless colours directly (btn-teal, outline-light) */
+html body .btn-teal, html body .btn-primary {
+  background: #4DB8E8 !important; border-color: #4DB8E8 !important; color: #fff !important; border-radius: 999px;
+}
+html body .btn-teal:hover, html body .btn-primary:hover { background: #2A9BD4 !important; border-color: #2A9BD4 !important; }
+html body .btn-outline-light { color: #2A9BD4 !important; border-color: rgba(77,184,232,.6) !important; background: transparent; }
+html body .btn-outline-light:hover { background: #4DB8E8 !important; color: #fff !important; }
+
+/* Teal → sky blue everywhere */
+.text-teal { color: #2A9BD4 !important; }
+.border-teal { border-color: #4DB8E8 !important; }
+.badge.bg-teal { background-color: #4DB8E8 !important; color: #fff; }
+.bg-teal[class*="bg-opacity"] { background-color: rgba(77,184,232,.15) !important; }
+.text-indigo { color: #1B6FB5 !important; }
+.card.bg-danger { background: linear-gradient(135deg, #F26B5B, #F79A5B) !important; }
+
+/* Navbar */
+html body .navbar-dark { background: #fff !important; }
+html body .navbar-dark .navbar-nav-link, html body .navbar-dark .text-white, html body .navbar-dark .fw-semibold { color: #1B3A5C !important; }
+html body .navbar .form-control, html body .navbar-search .form-control { background: #EFF6FF !important; color: #2B3A4A; border-color: transparent; }
+html body .navbar .form-control::placeholder { color: #6F8399; }
+
+/* Sidebar */
+html body .sidebar-dark, html body .sidebar-dark .sidebar-content { background: #fff !important; }
+html body .sidebar-dark .nav-link, html body .sidebar-dark h5, html body .sidebar-dark .nav-item-header { color: #2B3A4A !important; }
+html body .sidebar-dark .nav-sidebar .nav-link.active, html body .sidebar-dark .nav-sidebar .nav-link:hover { color: #2A9BD4 !important; }
+html body .sidebar-dark .nav-link.text-danger { color: #F26B5B !important; }
+html body .sidebar-dark .badge { color: #fff; }
