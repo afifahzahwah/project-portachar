@@ -157,3 +157,17 @@ html body .sidebar-dark .nav-link, html body .sidebar-dark h5, html body .sideba
 html body .sidebar-dark .nav-sidebar .nav-link.active, html body .sidebar-dark .nav-sidebar .nav-link:hover { color: #2A9BD4 !important; }
 html body .sidebar-dark .nav-link.text-danger { color: #F26B5B !important; }
 html body .sidebar-dark .badge { color: #fff; }
+
+/* Indicators: never wrap, vertically centred with logo / button / avatar */
+.navbar > .container-fluid > .nav { flex-wrap: nowrap; align-items: center; align-self: center; }
+.navbar .nav-item { align-items: center; }
+.navbar .badge { display: inline-flex; align-items: center; height: 28px; line-height: 1; white-space: nowrap; }
+.navbar .badge i { font-size: 1rem; line-height: 1; }
+ 
+/* The logo block is fixed at 17.5rem wide on desktop and steals room */
+.navbar-expand-lg .navbar-brand { width: auto; margin-right: 1.25rem; }
+ 
+/* Longer search bar (change 52rem to taste) */
+.navbar { --navbar-search-width: 52rem; }
+.navbar-collapse, .navbar-search { min-width: 0; }
+.navbar-search { width: 100%; }
